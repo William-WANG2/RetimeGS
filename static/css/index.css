@@ -155,3 +155,38 @@ body {
 #interpolation-image-wrapper img {
   border-radius: 5px;
 }
+
+.applications-carousel {
+  overflow: hidden;
+}
+
+.applications-carousel .item {
+  margin: 20px;
+  overflow: hidden;
+  border: none;
+  border-radius: 10px;
+  padding: 20px;
+  font-size: 0;
+  width: calc(100% - 40px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 600px;
+}
+
+.applications-carousel .content {
+  font-size: 16px;
+  width: 100%;
+}
+
+.applications-carousel video {
+  margin: 25px auto;
+  border-radius: 8px;
+  width: calc(100% - 50px);
+  padding: 20px;
+  display: block;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border: 3px solid #e0e0e0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
