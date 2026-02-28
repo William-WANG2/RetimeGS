@@ -1,11 +1,11 @@
 # RetimeGS
 
-This is the repository that contains source code for the [RetimeGS website](https://nerfies.github.io).
+This is the repository that contains source code for the [RetimeGS website](https://retimegs.github.io) adapted from the [Nerfies](https://nerfies.github.io) website.
 
 If you find RetimeGS useful for your work please cite:
 ```
 @article{wang2026retimegs,
-  author    = {},
+  author    = {Wang, Xuezhen and Ma, Li and Shen, Yulin and Wang, Zeyu and Sander, Pedro V.},
   title     = {RetimeGS: Continuous-Time Reconstruction of 4D Gaussian Splatting},
   journal   = {CVPR},
   year      = {2026},
