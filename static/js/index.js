@@ -60,6 +60,53 @@ function setInterpolationImage(i) {
   $('#interpolation-image-wrapper').empty().append(image);
 }
 
+function alignCarouselArrowsToVideo(carouselSelector) {
+  var root = document.querySelector(carouselSelector);
+  if (!root) {
+    return;
+  }
+
+  var slider = root.querySelector('.slider');
+  var prev = root.querySelector('.slider-navigation-previous');
+  var next = root.querySelector('.slider-navigation-next');
+  if (!slider || !prev || !next) {
+    return;
+  }
+
+  var activeSlide = root.querySelector('.slider-item.is-active') || root.querySelector('.slider-item');
+  if (!activeSlide) {
+    return;
+  }
+
+  var mediaElements = activeSlide.querySelectorAll('.carousel-media video, .carousel-media .ablation-figure, .carousel-media img');
+  if (!mediaElements.length) {
+    return;
+  }
+
+  var sliderRect = slider.getBoundingClientRect();
+  var top = Number.POSITIVE_INFINITY;
+  var bottom = Number.NEGATIVE_INFINITY;
+
+  mediaElements.forEach(function(mediaElement) {
+    var rect = mediaElement.getBoundingClientRect();
+    top = Math.min(top, rect.top);
+    bottom = Math.max(bottom, rect.bottom);
+  });
+
+  if (!isFinite(top) || !isFinite(bottom)) {
+    return;
+  }
+
+  var centerY = (top + bottom) / 2 - sliderRect.top;
+
+  prev.style.top = centerY + 'px';
+  next.style.top = centerY + 'px';
+  prev.style.marginTop = '0';
+  next.style.marginTop = '0';
+  prev.style.transform = 'translateY(-50%)';
+  next.style.transform = 'translateY(-50%)';
+}
+
 
 $(document).ready(function() {
     // Check for click events on the navbar burger icon
@@ -79,8 +126,8 @@ $(document).ready(function() {
 			autoplaySpeed: 3000,
     }
 
-		// Initialize all div with carousel class except applications-carousel
-    var carousels = bulmaCarousel.attach('.carousel:not(#applications-carousel)', options);
+		// Initialize all div with carousel class except applications/ablation/comparisons carousels
+    var carousels = bulmaCarousel.attach('.carousel:not(#applications-carousel):not(#ablation-carousel):not(#comparisons-carousel)', options);
 
     // Initialize applications carousel with different settings
     var applicationsOptions = {
@@ -93,23 +140,84 @@ $(document).ready(function() {
     }
     var applicationsCarousel = bulmaCarousel.attach('#applications-carousel', applicationsOptions);
 
+    // Initialize ablation carousel with the same settings as applications
+    var ablationOptions = {
+      slidesToScroll: 1,
+      slidesToShow: 1,
+      loop: true,
+      infinite: true,
+      autoplay: false,
+      autoplaySpeed: 3000,
+    }
+    var ablationCarousel = bulmaCarousel.attach('#ablation-carousel', ablationOptions);
+
+    // Initialize comparisons carousel with the same settings as applications
+    var comparisonsOptions = {
+      slidesToScroll: 1,
+      slidesToShow: 1,
+      loop: true,
+      infinite: true,
+      autoplay: false,
+      autoplaySpeed: 3000,
+    }
+    var comparisonsCarousel = bulmaCarousel.attach('#comparisons-carousel', comparisonsOptions);
+
+    function alignAllVideoCarousels() {
+      alignCarouselArrowsToVideo('#applications-carousel');
+      alignCarouselArrowsToVideo('#ablation-carousel');
+      alignCarouselArrowsToVideo('#comparisons-carousel');
+    }
+
     // Loop on each carousel initialized
-    var allCarousels = carousels.concat(applicationsCarousel);
+    var allCarousels = carousels.concat(applicationsCarousel, ablationCarousel, comparisonsCarousel);
     for(var i = 0; i < allCarousels.length; i++) {
     	// Add listener to  event
     	allCarousels[i].on('before:show', state => {
     		console.log(state);
+    setTimeout(alignAllVideoCarousels, 0);
     	});
     }
+
+    setTimeout(alignAllVideoCarousels, 0);
+    window.addEventListener('resize', alignAllVideoCarousels);
 
     // Add auto-advance functionality for applications carousel
     var applicationsItems = document.querySelectorAll('#applications-carousel .item');
     applicationsItems.forEach(function(item) {
       var video = item.querySelector('video');
       if (video) {
+        video.addEventListener('loadedmetadata', alignAllVideoCarousels);
         video.addEventListener('ended', function() {
           if (applicationsCarousel && applicationsCarousel.next) {
             applicationsCarousel.next();
+          }
+        });
+      }
+    });
+
+    // Add auto-advance functionality for ablation carousel
+    var ablationItems = document.querySelectorAll('#ablation-carousel .item');
+    ablationItems.forEach(function(item) {
+      var video = item.querySelector('video');
+      if (video) {
+        video.addEventListener('loadedmetadata', alignAllVideoCarousels);
+        video.addEventListener('ended', function() {
+          if (ablationCarousel && ablationCarousel.next) {
+            ablationCarousel.next();
+          }
+        });
+      }
+    });
+
+    // Add auto-advance functionality for comparisons carousel
+    var comparisonsItems = document.querySelectorAll('#comparisons-carousel .item');
+    comparisonsItems.forEach(function(item) {
+      var video = item.querySelector('video');
+      if (video) {
+        video.addEventListener('loadedmetadata', alignAllVideoCarousels);
+        video.addEventListener('ended', function() {
+          if (comparisonsCarousel && comparisonsCarousel.next) {
+            comparisonsCarousel.next();
           }
         });
       }

@@ -52,7 +52,7 @@
           <h1 class="title is-1 publication-title">RetimeGS: Continuous-Time Reconstruction of 4D Gaussian Splatting</h1>
           <div class="is-size-5 publication-authors">
             <span class="author-block">
-              <a href="placeholder">Xuezhen Wang</a><sup>1</sup>,</span>
+              <a href="https://www.linkedin.com/in/xuezhen-wang/">Xuezhen Wang</a><sup>1</sup>,</span>
             <span class="author-block">
               <a href="https://limacv.github.io/homepage/">Li Ma</a><sup>2</sup>,</span>
             <span class="author-block">
@@ -158,29 +158,38 @@
     <!-- Abstract. -->
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
-        <h2 class="title is-3">Abstract & Core Ideas</h2>
+        <h2 class="title is-3">Abstract & Intuition</h2>
         <div class="content has-text-justified">
           <p>
             Temporal retiming, the ability to reconstruct and render dynamic scenes at arbitrary timestamps, is crucial for applications such as slow-motion playback, temporal editing, and post-production. However, most existing 4D Gaussian Splatting (4DGS) methods overfit at discrete frame indices but struggle to represent continuous-time frames, leading to ghosting artifacts when interpolating between timestamps.
           </p>
           <!-- Core Idea Comparison Panel -->
-    <!-- Row 1: GT(t0) | text placeholder | GT(t1) -->
-    <div class="columns is-vcentered" style="margin-bottom: 0.5rem;">
-      <div class="column is-one-quarter has-text-centered">
-        <img src="./static/images/core_idea/gt1.jpg"
-             style="width: 100%; display: block;"
-             alt="GT(t0)"/>
-        <p style="margin-top: 0.4rem;"><strong>GT(t<sub>0</sub>)</strong></p>
-      </div>
-      <div class="column has-text-justified" style="font-size: 0.95rem;">
-        <!-- TODO: add content here -->
-      </div>
-      <div class="column is-one-quarter has-text-centered">
-        <img src="./static/images/core_idea/gt2.jpg"
-             style="width: 100%; display: block;"
-             alt="GT(t1)"/>
-        <p style="margin-top: 0.4rem;"><strong>GT(t<sub>1</sub>)</strong></p>
-      </div>
+    <div style="border: 2px solid #e0e0e0; border-radius: 8px; padding: 1.5rem; margin: 1.5rem auto; max-width: 90%; background-color: #fafafa;">
+    <h3 class="title is-4 has-text-centered">Motivating Example</h3>
+    <p class="has-text-centered" style="margin-bottom: 1rem;">
+      A simple example that highlights limitations in existing representations.
+    </p>
+    <div class="has-text-justified" style="font-size: 0.95rem; margin-bottom: 1rem;">
+        <div>
+  <p>
+    <strong>4D-primitive-based approaches</strong> (e.g., STGS, FreetimeGS, 4DGS, Ex4DGS) typically decompose opacity into multiple components: 
+    (1) a base (native) opacity, 
+    (2) a spatial 3D Gaussian opacity conditioned on time—where scale and rotation determine the covariance, and 
+    (3) a temporal opacity modeled using a 1D Gaussian or other parametric distributions. 
+    Importantly, the temporal opacity is freely optimized with supervision only at integer timestamps and without explicit regularization. 
+    As a result, the learned opacity may overfit to discrete frames and become <strong>temporally aliased (e.g., collapsing to sub-frame temporal support)</strong>, 
+    leading to <strong>ghosting artifacts (e.g. overlapping arms)</strong> when rendering intermediate frames.
+  </p>
+
+  <p>
+    <strong>Deformation-based approaches</strong> (e.g., DeformGS, Dynamic3DGS) represent scene geometry and appearance in a canonical space, 
+    using deformation fields, control points, or physical constraints to model dynamics. 
+    (1) These methods assume that scene changes are primarily driven by geometric motion, 
+    which <strong>limits their ability to handle variations in object visibility or time-varying texture and appearance</strong>. 
+    (2) Furthermore, they depend on accurate <strong>correspondence</strong> estimation, which becomes unreliable <strong>(e.g., when an object such as a shoe moves from one foot to the other)</strong> under large motions 
+    or limited inter-frame overlap.
+  </p>
+</div>
     </div>
 
     <!-- Row 2: Ours | Native 4D Primitive-based | Deform-based -->
@@ -191,21 +200,37 @@
       </div>
       <div class="column has-text-centered">
         <div id="core-idea-4d-wrapper" style="min-height: 60px;">Loading...</div>
-        <p style="margin-top: 0.4rem;"><strong>Native 4D Primitive-based</strong></p>
+        <p style="margin-top: 0.4rem;"><strong>4D-primitive-based</strong></p>
       </div>
       <div class="column has-text-centered">
         <div id="core-idea-deform-wrapper" style="min-height: 60px;">Loading...</div>
         <p style="margin-top: 0.4rem;"><strong>Deform-based</strong></p>
       </div>
     </div>
-    <input class="slider is-fullwidth is-large is-info"
-           id="core-idea-slider"
-           step="1" min="0" max="6" value="0" type="range">
+    <div style="display: flex; align-items: center; gap: 1rem; margin-top: 0.5rem;">
+      <span style="font-size: 0.85rem; white-space: nowrap;"><strong>GT(t<sub>0</sub>)</strong></span>
+      <input class="slider is-fullwidth is-large is-info"
+             id="core-idea-slider"
+             step="1" min="0" max="6" value="0" type="range">
+      <span style="font-size: 0.85rem; white-space: nowrap;"><strong>GT(t<sub>1</sub>)</strong></span>
+    </div>
+    </div>
     <!--/ Core Idea Comparison Panel -->
           <p>
             We identify this limitation as a form of temporal aliasing and propose RetimeGS, a simple yet effective 4DGS representation that explicitly defines the temporal behavior of the 3D Gaussian and mitigates temporal aliasing.
             To achieve smooth and consistent interpolation, we incorporate optical flow–guided initialization and supervision, triple-rendering supervision, and other targeted strategies. Together, these components enable ghost-free, temporally coherent rendering even under large motions. Experiments on datasets featuring fast motion, non-rigid deformation, and severe occlusions demonstrate that RetimeGS achieves superior quality and coherence over state-of-the-art methods.
           </p>
+
+          <!-- Key Insight Box -->
+          <div style="border: 2px solid #d0d0d0; border-radius: 8px; padding: 1.25rem; margin: 1.5rem auto; max-width: 92%; background-color: #f9f9f9;">
+            <h4 style="font-weight: 600; font-size: 1.05rem; margin-bottom: 0.75rem; color: #333;">
+              <strong>Ours: Best of Both Worlds</strong>
+            </h4>
+            <p style="line-height: 1.7; margin-bottom: 0;">
+              With coarse flow-guided primitive correspondences, each set of primitives explains at least two consecutive frames, mitigating temporal aliasing without forcing a single canonical explanation. This preserves the flexibility needed for topological changes and time-varying appearance.
+            </p>
+          </div>
+          <!--/ Key Insight Box -->
         </div>
       </div>
     </div>
@@ -230,184 +255,185 @@
 <section class="hero is-light is-small">
   <div class="hero-body">
     <div class="container is-max-desktop">
-      <h2 class="title is-3 has-text-centered">Applications</h2>
+      <h2 class="title is-3 has-text-centered" style="margin-bottom: -1rem;">Applications</h2>
       <div id="applications-carousel" class="carousel applications-carousel">
         <!-- Retiming -->
         <div class="item item-retiming">
           <div class="content">
-            <h3 class="title is-4 has-text-centered">Retiming</h3>
-            <p class="has-text-centered">
-              In film production, retiming allows directors to precisely adjust the temporal flow of scenes, which allows control over motion and narrative pacing without losing visual quality.
-            </p>
-            <video poster="" id="retiming" autoplay controls muted loop playsinline height="100%">
-              <source src="./static/videos/applications/retiming.mp4"
-                      type="video/mp4">
-            </video>
+            <div class="carousel-text">
+              <h3 class="title is-4 has-text-centered">Retiming</h3>
+              <p class="has-text-centered">
+                In film production, retiming allows directors to precisely adjust the temporal flow of scenes, which allows control over motion and narrative pacing without losing visual quality.
+              </p>
+            </div>
+            <div class="carousel-media">
+              <video poster="" id="retiming" autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/applications/retiming.mp4"
+                        type="video/mp4">
+              </video>
+            </div>
           </div>
         </div>
         <!-- Slow Motion Playback -->
         <div class="item item-slow-motion">
           <div class="content">
-            <h3 class="title is-4 has-text-centered">Slow Motion Playback</h3>
-            <p class="has-text-centered">
-              Slow motion effects are important in cinematography for capturing dramatic moments and revealing details invisible to the human eye.
-            </p>
-            <video poster="" id="slow-motion" autoplay controls muted loop playsinline height="100%">
-              <source src="./static/videos/applications/slow-motion.mp4"
-                      type="video/mp4">
-            </video>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="container is-max-desktop">
-
-    <div class="columns is-centered">
-
-      <!-- Visual Effects. -->
-      <div class="column">
-        <div class="content">
-          <h2 class="title is-3">Visual Effects</h2>
-          <p>
-            Using <i>nerfies</i> you can create fun visual effects. This Dolly zoom effect
-            would be impossible without nerfies since it would require going through a wall.
-          </p>
-          <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/dollyzoom-stacked.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-      </div>
-      <!--/ Visual Effects. -->
-
-      <!-- Matting. -->
-      <div class="column">
-        <h2 class="title is-3">Matting</h2>
-        <div class="columns is-centered">
-          <div class="column content">
-            <p>
-              As a byproduct of our method, we can also solve the matting problem by ignoring
-              samples that fall outside of a bounding box during rendering.
-            </p>
-            <video id="matting-video" controls playsinline height="100%">
-              <source src="./static/videos/matting.mp4"
-                      type="video/mp4">
-            </video>
-          </div>
-
-        </div>
-      </div>
-    </div>
-    <!--/ Matting. -->
-
-    <!-- Animation. -->
-    <div class="columns is-centered">
-      <div class="column is-full-width">
-        <h2 class="title is-3">Animation</h2>
-
-        <!-- Interpolating. -->
-        <h3 class="title is-4">Interpolating states</h3>
-        <div class="content has-text-justified">
-          <p>
-            We can also animate the scene by interpolating the deformation latent codes of two input
-            frames. Use the slider here to linearly interpolate between the left frame and the right
-            frame.
-          </p>
-        </div>
-        <div class="columns is-vcentered interpolation-panel">
-          <div class="column is-3 has-text-centered">
-            <img src="./static/images/interpolate_start.jpg"
-                 class="interpolation-image"
-                 alt="Interpolate start reference image."/>
-            <p>Start Frame</p>
-          </div>
-          <div class="column interpolation-video-column">
-            <div id="interpolation-image-wrapper">
-              Loading...
+            <div class="carousel-text">
+              <h3 class="title is-4 has-text-centered">Slow Motion Playback</h3>
+              <p class="has-text-centered">
+                Slow motion effects are important in cinematography for capturing dramatic moments and revealing details invisible to the human eye.
+              </p>
             </div>
-            <input class="slider is-fullwidth is-large is-info"
-                   id="interpolation-slider"
-                   step="1" min="0" max="100" value="0" type="range">
+            <div class="carousel-media">
+              <video poster="" id="slow-motion" autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/applications/slow-motion.mp4"
+                        type="video/mp4">
+              </video>
+            </div>
           </div>
-          <div class="column is-3 has-text-centered">
-            <img src="./static/images/interpolate_end.jpg"
-                 class="interpolation-image"
-                 alt="Interpolation end reference image."/>
-            <p class="is-bold">End Frame</p>
-          </div>
-        </div>
-        <br/>
-        <!--/ Interpolating. -->
-
-        <!-- Re-rendering. -->
-        <h3 class="title is-4">Re-rendering the input video</h3>
-        <div class="content has-text-justified">
-          <p>
-            Using <span class="dnerf">Nerfies</span>, you can re-render a video from a novel
-            viewpoint such as a stabilized camera by playing back the training deformations.
-          </p>
-        </div>
-        <div class="content has-text-centered">
-          <video id="replay-video"
-                 controls
-                 muted
-                 preload
-                 playsinline
-                 width="75%">
-            <source src="./static/videos/replay.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <!--/ Re-rendering. -->
-
-      </div>
-    </div>
-    <!--/ Animation. -->
-
-
-    <!-- Concurrent Work. -->
-    <div class="columns is-centered">
-      <div class="column is-full-width">
-        <h2 class="title is-3">Related Links</h2>
-
-        <div class="content has-text-justified">
-          <p>
-            There's a lot of excellent work that was introduced around the same time as ours.
-          </p>
-          <p>
-            <a href="https://arxiv.org/abs/2104.09125">Progressive Encoding for Neural Optimization</a> introduces an idea similar to our windowed position encoding for coarse-to-fine optimization.
-          </p>
-          <p>
-            <a href="https://www.albertpumarola.com/research/D-NeRF/index.html">D-NeRF</a> and <a href="https://gvv.mpi-inf.mpg.de/projects/nonrigid_nerf/">NR-NeRF</a>
-            both use deformation fields to model non-rigid scenes.
-          </p>
-          <p>
-            Some works model videos with a NeRF by directly modulating the density, such as <a href="https://video-nerf.github.io/">Video-NeRF</a>, <a href="https://www.cs.cornell.edu/~zl548/NSFF/">NSFF</a>, and <a href="https://neural-3d-video.github.io/">DyNeRF</a>
-          </p>
-          <p>
-            There are probably many more by the time you are reading this. Check out <a href="https://dellaert.github.io/NeRF/">Frank Dellart's survey on recent NeRF papers</a>, and <a href="https://github.com/yenchenlin/awesome-NeRF">Yen-Chen Lin's curated list of NeRF papers</a>.
-          </p>
         </div>
       </div>
     </div>
-    <!--/ Concurrent Work. -->
-
   </div>
 </section>
 
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered" style="margin-bottom: -1rem;">Comparisons</h2>
+      <div id="comparisons-carousel" class="carousel applications-carousel comparisons-carousel">
+        <div class="item item-comparison-1">
+          <div class="content">
+            <div class="carousel-media">
+              <video poster="" id="comparison-1" autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/comparisons/1k_drama_comparison_combined.mp4"
+                        type="video/mp4">
+              </video>
+            </div>
+          </div>
+        </div>
+        <div class="item item-comparison-2">
+          <div class="content">
+            <div class="carousel-media">
+              <video poster="" id="comparison-2" autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/comparisons/1k_gz_newundress_2_comparison_combined.mp4"
+                        type="video/mp4">
+              </video>
+            </div>
+          </div>
+        </div>
+        <div class="item item-comparison-3">
+          <div class="content">
+            <div class="carousel-media">
+              <video poster="" id="comparison-3" autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/comparisons/1k_gz_stretch_2_comparison_combined.mp4"
+                        type="video/mp4">
+              </video>
+            </div>
+          </div>
+        </div>
+        <div class="item item-comparison-4">
+          <div class="content">
+            <div class="carousel-media">
+              <video poster="" id="comparison-4" autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/comparisons/1k_minority_dance_comparison_combined.mp4"
+                        type="video/mp4">
+              </video>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered" style="margin-bottom: -1rem;">Ablations</h2>
+      <div id="ablation-carousel" class="carousel applications-carousel ablation-carousel">
+        <!-- Flow-related Components -->
+        <div class="item item-flow-related-components">
+          <div class="content">
+            <div class="carousel-text">
+              <h3 class="title is-4 has-text-centered">Flow-related Components</h3>
+              <p class="has-text-centered">
+                Flow-related Components is important for coarse correspondence estimation.
+              </p>
+            </div>
+            <div class="carousel-media">
+              <video poster="" id="ablation-flow-related-components" autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/ablation/flow-related-components.mp4"
+                        type="video/mp4">
+              </video>
+            </div>
+          </div>
+        </div>
+        <!-- Triple Rendering -->
+        <div class="item item-triple-rendering">
+          <div class="content">
+            <div class="carousel-text">
+              <h3 class="title is-4 has-text-centered">Triple Rendering</h3>
+              <p class="has-text-centered">
+                W/o Triple Rendering, primitives from neighboring temporal intervals jointly reconstruct the input frame but contribute unevenly to different spatial regions, resulting in inconsistent reconstruction.
+              </p>
+            </div>
+            <div class="carousel-media">
+              <video poster="" id="ablation-triple-rendering" autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/ablation/triple-rendering.mp4"
+                        type="video/mp4">
+              </video>
+            </div>
+          </div>
+        </div>
+        <!-- Spline Trajectory -->
+        <div class="item item-spline-trajectory">
+          <div class="content">
+            <div class="carousel-text">
+              <h3 class="title is-4 has-text-centered">Spline Trajectory</h3>
+              <p class="has-text-centered">
+                Piece-wise linear trajectories introduce visible kinks and temporal artifacts in the motion.
+              </p>
+            </div>
+            <div class="carousel-media">
+              <video poster="" id="ablation-spline-trajectory" autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/ablation/spline.mp4"
+                        type="video/mp4">
+              </video>
+            </div>
+          </div>
+        </div>
+        <!-- Stretch -->
+        <div class="item item-stretch">
+          <div class="content">
+            <div class="carousel-text">
+              <h3 class="title is-4 has-text-centered">Dynamic Stretching</h3>
+              <p class="has-text-centered">
+                The magenta is rendered using static stretched primitives, and the teal is rendered using dynamic primitives (with static background removed).
+              </p>
+            </div>
+            <div class="carousel-media">
+              <img class="ablation-figure" src="./static/videos/ablation/ablation_stretching.png"
+                   alt="Stretch ablation comparison"/>
+              <video poster="" id="ablation-stretch" autoplay controls muted loop playsinline height="100%">
+                <source src="./static/videos/ablation/stretch.mp4"
+                        type="video/mp4">
+              </video>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
-    <pre><code>@article{park2021nerfies,
-  author    = {Park, Keunhong and Sinha, Utkarsh and Barron, Jonathan T. and Bouaziz, Sofien and Goldman, Dan B and Seitz, Steven M. and Martin-Brualla, Ricardo},
-  title     = {Nerfies: Deformable Neural Radiance Fields},
-  journal   = {ICCV},
-  year      = {2021},
+    <pre><code>@article{wang2026retimegs,
+  author    = {Xuezhen Wang and Li Ma and Yulin Shen and Zeyu Wang and Pedro V. Sander},
+  title     = {RetimeGS: Continuous-Time Reconstruction of 4D Gaussian Splatting},
+  journal   = {CVPR},
+  year      = {2026},
 }</code></pre>
   </div>
 </section>
