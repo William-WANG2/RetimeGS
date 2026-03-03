@@ -200,14 +200,7 @@ body {
   height: auto;
   aspect-ratio: 16 / 9;
   object-fit: contain;
-  background-color: #000;
+  background-color: #fff;
   border: 3px solid #e0e0e0;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-
-.ablation-carousel .item-stretch .ablation-figure,
-.ablation-carousel .item-stretch video {
-  width: 50%;
-  padding: 0;
-  margin: 12px auto;
 }
