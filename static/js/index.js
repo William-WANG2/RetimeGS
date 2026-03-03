@@ -126,8 +126,8 @@ $(document).ready(function() {
 			autoplaySpeed: 3000,
     }
 
-		// Initialize all div with carousel class except applications/ablation/comparisons carousels
-    var carousels = bulmaCarousel.attach('.carousel:not(#applications-carousel):not(#ablation-carousel):not(#comparisons-carousel)', options);
+    // Initialize all div with carousel class except applications/ablation/comparisons/more carousels
+    var carousels = bulmaCarousel.attach('.carousel:not(#applications-carousel):not(#ablation-carousel):not(#comparisons-carousel):not(#more-carousel)', options);
 
     // Initialize applications carousel with different settings
     var applicationsOptions = {
@@ -162,14 +162,26 @@ $(document).ready(function() {
     }
     var comparisonsCarousel = bulmaCarousel.attach('#comparisons-carousel', comparisonsOptions);
 
+    // Initialize more carousel with the same settings as applications
+    var moreOptions = {
+      slidesToScroll: 1,
+      slidesToShow: 1,
+      loop: true,
+      infinite: true,
+      autoplay: false,
+      autoplaySpeed: 3000,
+    }
+    var moreCarousel = bulmaCarousel.attach('#more-carousel', moreOptions);
+
     function alignAllVideoCarousels() {
       alignCarouselArrowsToVideo('#applications-carousel');
       alignCarouselArrowsToVideo('#ablation-carousel');
       alignCarouselArrowsToVideo('#comparisons-carousel');
+      alignCarouselArrowsToVideo('#more-carousel');
     }
 
     // Loop on each carousel initialized
-    var allCarousels = carousels.concat(applicationsCarousel, ablationCarousel, comparisonsCarousel);
+    var allCarousels = carousels.concat(applicationsCarousel, ablationCarousel, comparisonsCarousel, moreCarousel);
     for(var i = 0; i < allCarousels.length; i++) {
     	// Add listener to  event
     	allCarousels[i].on('before:show', state => {
@@ -218,6 +230,20 @@ $(document).ready(function() {
         video.addEventListener('ended', function() {
           if (comparisonsCarousel && comparisonsCarousel.next) {
             comparisonsCarousel.next();
+          }
+        });
+      }
+    });
+
+    // Add auto-advance functionality for more carousel
+    var moreItems = document.querySelectorAll('#more-carousel .item');
+    moreItems.forEach(function(item) {
+      var video = item.querySelector('video');
+      if (video) {
+        video.addEventListener('loadedmetadata', alignAllVideoCarousels);
+        video.addEventListener('ended', function() {
+          if (moreCarousel && moreCarousel.next) {
+            moreCarousel.next();
           }
         });
       }
