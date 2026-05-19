@@ -7,7 +7,7 @@ If you find RetimeGS useful for your work please cite:
 @article{wang2026retimegs,
   author    = {Wang, Xuezhen and Ma, Li and Shen, Yulin and Wang, Zeyu and Sander, Pedro V.},
   title     = {RetimeGS: Continuous-Time Reconstruction of 4D Gaussian Splatting},
-  journal   = {CVPR},
+  journal   = {In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
   year      = {2026},
 }
 ```
