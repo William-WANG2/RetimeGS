@@ -1,6 +1,6 @@
 # RetimeGS
 
-This is the repository that contains source code for the [RetimeGS website](https://retimegs.github.io) adapted from the [Nerfies](https://nerfies.github.io) website.
+This is the repository for the [RetimeGS project page website](https://retimegs.github.io) adapted from the [Nerfies](https://nerfies.github.io) website.
 
 If you find RetimeGS useful for your work please cite:
 ```
